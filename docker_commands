@@ -1,0 +1,31 @@
+## Docker commands used to build the application
+## On the Project Folder (techtrends), execute
+docker build . -t techtrends:latest
+
+## Verify if the image was created successfully
+docker images
+## REPOSITORY   TAG       IMAGE ID       CREATED         SIZE
+## techtrends   latest    5d9bb896c8f5   2 minutes ago   923MB
+
+## Docker commands used to run the application
+docker run -d -p 7111:3111 techtrends
+
+## Docker commands used to get the application logs
+docker ps # To get the running Container ID
+docker logs ContainerID
+docker logs ContainerID --follow
+
+## Logs from the container running the TechTrends application
+ * Serving Flask app "app" (lazy loading)
+ * Environment: production
+   WARNING: This is a development server. Do not use it in a production deployment.
+   Use a production WSGI server instead.
+ * Debug mode: off
+INFO:werkzeug: * Running on http://0.0.0.0:3111/ (Press CTRL+C to quit)
+INFO:app:Article "2020 CNCF Annual Report" retrieved!
+INFO:werkzeug:172.17.0.1 - - [28/Mar/2022 13:53:52] "GET /1 HTTP/1.1" 200 -
+INFO:werkzeug:172.17.0.1 - - [28/Mar/2022 13:54:01] "GET / HTTP/1.1" 200 -
+INFO:app:Article "KubeCon + CloudNativeCon 2021" retrieved!
+INFO:werkzeug:172.17.0.1 - - [28/Mar/2022 13:54:41] "GET /2 HTTP/1.1" 200 -
+INFO:app:About Us retrieved!
+INFO:werkzeug:172.17.0.1 - - [28/Mar/2022 14:00:15] "GET /about HTTP/1.1" 200 -
