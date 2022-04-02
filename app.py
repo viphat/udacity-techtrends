@@ -76,11 +76,22 @@ def create():
 # Define the /healthz endpoint for Health Checks
 @app.route('/healthz')
 def healthcheck():
-    response = app.response_class(
-        response=json.dumps({"result":"OK - healthy"}),
-        status=200,
-        mimetype='application/json'
-    )
+    try:
+        connection = get_db_connection()
+        connection.execute('SELECT COUNT(*) FROM posts')
+        connection.close()
+        response = app.response_class(
+            response=json.dumps({"result":"OK - healthy"}),
+            status=200,
+            mimetype='application/json'
+        )
+    except:
+        response = app.response_class(
+            response=json.dumps({"result":"ERROR - unhealthy"}),
+            status=500,
+            mimetype='application/json'
+        )
+        connection.close()
 
     return response
 
