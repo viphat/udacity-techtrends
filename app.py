@@ -1,5 +1,6 @@
 import sqlite3
 import logging
+import sys
 
 from flask import Flask, jsonify, json, render_template, request, url_for, redirect, flash
 from werkzeug.exceptions import abort
@@ -41,7 +42,7 @@ def index():
 def post(post_id):
     post = get_post(post_id)
     if post is None:
-      app.logger.info('Article with ID "%s" Not Found!', post_id)
+      app.logger.error('Article with ID "%s" Not Found!', post_id)
       return render_template('404.html'), 404
     else:
       app.logger.info('Article "%s" retrieved!', post['title'])
@@ -112,5 +113,11 @@ def metrics():
 
 # start the application on port 3111
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
+    stdout_handler = logging.StreamHandler(sys.stdout)
+    stderr_handler = logging.StreamHandler(sys.stderr)
+    stdout_handler.setLevel(logging.DEBUG)
+    stderr_handler.setLevel(logging.ERROR)
+    handlers = [stderr_handler, stdout_handler]
+    format_output = "%(levelname)s:%(name)s:%(asctime)s, %(message)s"
+    logging.basicConfig(format=format_output, level=logging.DEBUG, handlers=handlers)
     app.run(host='0.0.0.0', port='3111')
